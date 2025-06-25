@@ -206,11 +206,20 @@ from telegram import Message, Update
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-# Инициализация (один раз)
-cred = credentials.Certificate("firebase-key.json")
+import os
+import json
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# Получаем ключ из окружения
+service_account_info = json.loads(os.environ["FIREBASE_KEY_JSON"])
+cred = credentials.Certificate(service_account_info)
+
+# Инициализация
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 balances_ref = db.collection("balances")
+
 
 # Загрузить все балансы
 def load_balances():
