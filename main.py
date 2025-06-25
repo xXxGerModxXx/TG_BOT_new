@@ -204,17 +204,25 @@ from telegram import Message, Update
 
 
 
-
+import json
 from firebase_admin import credentials, firestore
 import firebase_admin
 
-cred = credentials.Certificate("/etc/secrets/firebase-key.json")
+with open("/etc/secrets/firebase-key.json", "r") as f:
+    key_json = f.read()
+
+# Если ключ в файле с \n - преобразуем их в реальные переносы
+key_json = key_json.replace('\\n', '\n')
+
+cred_dict = json.loads(key_json)
+cred = credentials.Certificate(cred_dict)
 
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 balances_ref = db.collection("balances")
+
 
 
 # Загрузить все балансы
