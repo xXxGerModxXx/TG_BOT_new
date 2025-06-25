@@ -205,16 +205,14 @@ from telegram import Message, Update
 
 
 
-# Получаем ключ из окружения
 from firebase_admin import credentials, firestore
 import firebase_admin
 
-cred = credentials.Certificate("/etc/secrets/firebase-key.json")  # ✅ Читаем из файла
-firebase_admin.initialize_app(cred)
-db = firestore.client()
+cred = credentials.Certificate("/etc/secrets/firebase-key.json")
 
-# Инициализация
-firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    firebase_admin.initialize_app(cred)
+
 db = firestore.client()
 balances_ref = db.collection("balances")
 
