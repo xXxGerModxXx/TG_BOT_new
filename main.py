@@ -203,17 +203,15 @@ import datetime
 from telegram import Message, Update
 
 
-import firebase_admin
-from firebase_admin import credentials, firestore
 
-import os
-import json
-import firebase_admin
-from firebase_admin import credentials, firestore
 
 # Получаем ключ из окружения
-service_account_info = json.loads(os.environ["FIREBASE_KEY_JSON"])
-cred = credentials.Certificate(service_account_info)
+from firebase_admin import credentials, firestore
+import firebase_admin
+
+cred = credentials.Certificate("/etc/secrets/firebase-key.json")  # ✅ Читаем из файла
+firebase_admin.initialize_app(cred)
+db = firestore.client()
 
 # Инициализация
 firebase_admin.initialize_app(cred)
