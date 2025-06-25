@@ -27,7 +27,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 logging.getLogger("asyncio").setLevel(logging.WARNING)
 
 # 🔑 Конфиги
-TOKEN = "7604409638:AAEeCRN70l3-I_Hp2bMs3LbsWaNXsvzzZ2k"
+TOKEN = "7604409638:AAGGL_mFO7NFcGiGRZw_-lhioQih9NG4IDs"
 BALANCE_FILE = 'обновление/balances.json'
 ADMIN_USERNAME = "hto_i_taki"  # без @
 
@@ -49,9 +49,7 @@ def home():
     return "OK"
 
 def start_dummy_server():
-    port = int(os.environ.get("PORT", 10000))
-    flask_app.run(host="0.0.0.0", port=port)
-
+    flask_app.run(host="0.0.0.0", port=10000)
 
 # === Запуск бота ===
 
@@ -203,26 +201,16 @@ import datetime
 from telegram import Message, Update
 
 
-
-import json
-from firebase_admin import credentials, firestore
 import firebase_admin
+from firebase_admin import credentials, firestore
 
-with open("/etc/secrets/firebase-key.json", "r") as f:
-    key_json = f.read()
-
-# Если ключ в файле с \n - преобразуем их в реальные переносы
-key_json = key_json.replace('\\n', '\n')
-
-cred_dict = json.loads(key_json)
-cred = credentials.Certificate(cred_dict)
-
+# Инициализация (в начале файла) — выполняется только один раз
 if not firebase_admin._apps:
+    cred = credentials.Certificate("firebase-key.json")
     firebase_admin.initialize_app(cred)
 
 db = firestore.client()
 balances_ref = db.collection("balances")
-
 
 
 # Загрузить все балансы
